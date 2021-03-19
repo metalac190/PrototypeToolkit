@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Game.UI
 {
-    public class LevelSelectMenu : Menu
+    public class ModeSelectMenu : Menu
     {
         
     }

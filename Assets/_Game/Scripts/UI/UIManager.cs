@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class UIManager : MonoBehaviour
+namespace Game.UI
 {
-    public abstract void CloseAllMenus();
-
-    private void Start()
+    public abstract class UIManager : MonoBehaviour
     {
-        // all menus should start disabled, and activated as needed
-        CloseAllMenus();
+        public abstract void CloseAllMenus();
+
+        private void Start()
+        {
+            // all menus should start disabled, and activated as needed
+            CloseAllMenus();
+        }
     }
 }
+

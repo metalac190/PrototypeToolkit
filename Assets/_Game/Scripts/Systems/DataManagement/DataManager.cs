@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace PTTK.Data
+namespace DataManagement
 {
     public class DataManager
     {

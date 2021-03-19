@@ -5,10 +5,8 @@ using UnityEngine.SceneManagement;
 
 namespace LevelManagement
 {
-    public class LevelLoader : MonoBehaviour
+    public static class LevelLoader
     {
-        private static int _mainMenuIndex = 1;
-
         public static void LoadLevel(string levelName)
         {
             if (Application.CanStreamedLevelBeLoaded(levelName))
@@ -46,13 +44,8 @@ namespace LevelManagement
             int totalSceneCount = SceneManager.sceneCountInBuildSettings;
             // wraps between total count and 0
             nextSceneIndex = nextSceneIndex % totalSceneCount;
-            nextSceneIndex = Mathf.Clamp(nextSceneIndex, _mainMenuIndex, totalSceneCount);
+            nextSceneIndex = Mathf.Clamp(nextSceneIndex, 0, totalSceneCount);
             SceneManager.LoadScene(nextSceneIndex);
-        }
-
-        public static void LoadMainMenuLevel()
-        {
-            SceneManager.LoadScene(_mainMenuIndex);
         }
     }
 }

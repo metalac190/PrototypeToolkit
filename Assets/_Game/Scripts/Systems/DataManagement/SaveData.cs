@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace PTTK.Data
+namespace DataManagement
 {
     [System.Serializable]
     public class SaveData

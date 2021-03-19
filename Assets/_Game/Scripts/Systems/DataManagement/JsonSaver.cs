@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 /// <summary>
 /// Based on Wilmer Lin's Level Management in Unity tutorial
 /// </summary>
-namespace PTTK.Data
+namespace DataManagement
 {
     public class JsonSaver
     {
