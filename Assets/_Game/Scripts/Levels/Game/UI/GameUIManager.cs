@@ -10,11 +10,11 @@ namespace Levels.Game
         [SerializeField] private PauseMenu _pauseMenu;
         [SerializeField] private WinScreen _winMenu;
 
-        public override void CloseAllMenus()
+        public override void InitializeMenus()
         {
-            _gameMenu.gameObject.SetActive(false);
-            _pauseMenu.gameObject.SetActive(false);
-            _winMenu.gameObject.SetActive(false);
+            _gameMenu.Canvas.gameObject.SetActive(false);
+            _pauseMenu.Canvas.gameObject.SetActive(false);
+            _winMenu.Canvas.gameObject.SetActive(false);
         }
 
     }

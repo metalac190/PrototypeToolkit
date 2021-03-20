@@ -17,14 +17,13 @@ namespace Levels.MainMenu
         public CreditsMenu CreditsMenu => _creditsMenu;
         public ModeSelectMenu ModeSelectMenu => _modeSelectMenu;
 
-        public override void CloseAllMenus()
+        public override void InitializeMenus()
         {
             _rootMenu.Canvas.gameObject.SetActive(false);
             _settingsMenu.Canvas.gameObject.SetActive(false);
             _creditsMenu.Canvas.gameObject.SetActive(false);
             _modeSelectMenu.Canvas.gameObject.SetActive(false);
         }
-
     }
 }
 
