@@ -1,13 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Game.UI
+namespace Levels.Game
 {
-    public class RootMenu : Menu
+    public class PauseMenu : Menu
     {
 
     }
 }
-

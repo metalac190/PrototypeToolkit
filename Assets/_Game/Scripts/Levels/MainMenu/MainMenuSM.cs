@@ -2,32 +2,36 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainMenuSM : StateMachineMB
+namespace Levels.MainMenu
 {
-    [SerializeField] MainMenuUIManager _uIManager;
-    // input
-    // audio
-    // data
-
-    public MainMenuUIManager UI => _uIManager;
-
-    // states
-    public MainMenuRootState RootState { get; private set; }
-    public MainMenuCreditsState CreditsState { get; private set; }
-    public MainMenuSettingsState SettingsState { get; private set; }
-    public MainMenuLevelSelectState LevelSelectState { get; private set; }
-
-    private void Awake()
+    public class MainMenuSM : StateMachineMB
     {
-        // initialize states
-        RootState = new MainMenuRootState(this);
-        CreditsState = new MainMenuCreditsState(this);
-        SettingsState = new MainMenuSettingsState(this);
-        LevelSelectState = new MainMenuLevelSelectState(this);
+        [SerializeField] MainMenuUIManager _uIManager;
+        // input
+        // audio
+        // data
+
+        public MainMenuUIManager UI => _uIManager;
+
+        // states
+        public MainMenuRootState RootState { get; private set; }
+        public MainMenuCreditsState CreditsState { get; private set; }
+        public MainMenuSettingsState SettingsState { get; private set; }
+        public MainMenuLevelSelectState LevelSelectState { get; private set; }
+
+        private void Awake()
+        {
+            // initialize states
+            RootState = new MainMenuRootState(this);
+            CreditsState = new MainMenuCreditsState(this);
+            SettingsState = new MainMenuSettingsState(this);
+            LevelSelectState = new MainMenuLevelSelectState(this);
+        }
+
+        private void Start()
+        {
+            ChangeState(RootState);
+        }
     }
 
-    private void Start()
-    {
-        ChangeState(RootState);
-    }
 }

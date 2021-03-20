@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.UI
+namespace Levels.Game
 {
     public class GameUIManager : UIManager
     {
@@ -16,6 +16,7 @@ namespace Game.UI
             _pauseMenu.gameObject.SetActive(false);
             _winMenu.gameObject.SetActive(false);
         }
+
     }
 }
 

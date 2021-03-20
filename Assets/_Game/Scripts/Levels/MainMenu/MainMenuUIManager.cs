@@ -1,26 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.UI;
+using System.Reflection;
 
-public class MainMenuUIManager : UIManager
+namespace Levels.MainMenu
 {
-    [SerializeField] private RootMenu _rootMenu;
-    [SerializeField] private SettingsMenu _settingsMenu;
-    [SerializeField] private CreditsMenu _creditsMenu;
-    [SerializeField] private ModeSelectMenu _levelSelectMenu;
-
-    public RootMenu RootMenu => _rootMenu;
-    public SettingsMenu SettingsMenu => _settingsMenu;
-    public CreditsMenu CreditsMenu => _creditsMenu;
-    public ModeSelectMenu LevelSelectMenu => _levelSelectMenu;
-
-    public override void CloseAllMenus()
+    public class MainMenuUIManager : UIManager
     {
-        _rootMenu.gameObject.SetActive(false);
-        _settingsMenu.gameObject.SetActive(false);
-        _creditsMenu.gameObject.SetActive(false);
-        _levelSelectMenu.gameObject.SetActive(false);
+        [SerializeField] private RootMenu _rootMenu;
+        [SerializeField] private SettingsMenu _settingsMenu;
+        [SerializeField] private CreditsMenu _creditsMenu;
+        [SerializeField] private ModeSelectMenu _modeSelectMenu;
+
+        public RootMenu RootMenu => _rootMenu;
+        public SettingsMenu SettingsMenu => _settingsMenu;
+        public CreditsMenu CreditsMenu => _creditsMenu;
+        public ModeSelectMenu ModeSelectMenu => _modeSelectMenu;
+
+        public override void CloseAllMenus()
+        {
+            _rootMenu.Canvas.gameObject.SetActive(false);
+            _settingsMenu.Canvas.gameObject.SetActive(false);
+            _creditsMenu.Canvas.gameObject.SetActive(false);
+            _modeSelectMenu.Canvas.gameObject.SetActive(false);
+        }
+
     }
 }
+
 

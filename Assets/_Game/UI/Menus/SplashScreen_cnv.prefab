@@ -120,7 +120,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 853994593}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: LevelManagement.SplashMenu, Assembly-CSharp
         m_MethodName: FadeAndLoad
         m_Mode: 1
@@ -231,9 +231,6 @@ GameObject:
   - component: {fileID: 2885373526197982043}
   - component: {fileID: 2885373526197982042}
   - component: {fileID: 2885373526197982021}
-  - component: {fileID: 2885373526197982041}
-  - component: {fileID: 853994593}
-  - component: {fileID: 853994594}
   m_Layer: 5
   m_Name: SplashScreen_cnv
   m_TagString: Untagged
@@ -323,51 +320,6 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &2885373526197982041
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2885373526197982020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50b6074852f43c143822b2096f0b0479, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _solidAlpha: 1
-  _clearAlpha: 0
-  _fadeDuration: 1
-  _graphicsToFade:
-  - {fileID: 2885373526480289104}
-  - {fileID: 2885373526404645462}
-  - {fileID: 2885373526173628209}
---- !u!114 &853994593
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2885373526197982020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4e1fd083c3309140bfb5210df98f2c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _screenFader: {fileID: 2885373526197982041}
-  _delay: 0.5
---- !u!114 &853994594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2885373526197982020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d88d38853749b24f855a86787431be0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2885373526404645456
 GameObject:
   m_ObjectHideFlags: 0

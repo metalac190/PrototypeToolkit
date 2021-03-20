@@ -1,13 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Game.UI
+namespace Levels.SplashMenu
 {
-    public class ModeSelectMenu : Menu
+    public class SplashMenu : MonoBehaviour
     {
-        
+
     }
 }
 

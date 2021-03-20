@@ -2,12 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainMenuSettingsState : State
+namespace Levels.MainMenu
 {
-    MainMenuSM _stateMachine;
-
-    public MainMenuSettingsState(MainMenuSM stateMachine)
+    public class MainMenuSettingsState : State
     {
-        _stateMachine = stateMachine;
+        MainMenuSM _stateMachine;
+
+        public MainMenuSettingsState(MainMenuSM stateMachine)
+        {
+            _stateMachine = stateMachine;
+        }
     }
 }
+
