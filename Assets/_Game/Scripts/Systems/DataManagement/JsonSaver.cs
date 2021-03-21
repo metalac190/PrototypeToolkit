@@ -13,13 +13,8 @@ namespace DataManagement
 {
     public class JsonSaver
     {
-        private static readonly string _filename = "saveData01.sav";
-        public static string GetSaveFilename()
-        {
-            return Application.persistentDataPath + "/" + _filename;
-        }
 
-        public void Save(SaveData data)
+        public void Save(SaveData data, string filePath)
         {
             data.HashValue = String.Empty;
             
@@ -27,10 +22,8 @@ namespace DataManagement
             // convert json to Hash and reoutput
             data.HashValue = GetSHA256(json);
             json = JsonUtility.ToJson(data);
-
-            string saveFilename = GetSaveFilename();
             // create file on disk
-            FileStream fileStream = new FileStream(saveFilename, FileMode.Create);
+            FileStream fileStream = new FileStream(filePath, FileMode.Create);
             // write json to file
             using(StreamWriter writer = new StreamWriter(fileStream))
             {
@@ -38,18 +31,17 @@ namespace DataManagement
             }
         }
 
-        public bool Load(SaveData data)
+        public bool Load(SaveData data, string targetFilePath)
         {
-            string loadFilename = GetSaveFilename();
             // if we find it, read from file
-            if (File.Exists(loadFilename))
+            if (File.Exists(targetFilePath))
             {
-                using (StreamReader reader = new StreamReader(loadFilename))
+                using (StreamReader reader = new StreamReader(targetFilePath))
                 {
                     string json = reader.ReadToEnd();
                     // check hash before reading
 
-                    if (CheckData(json))
+                    if (CheckData(json, targetFilePath))
                     {
                         Debug.Log("hashes are equal");
                     }
@@ -66,7 +58,7 @@ namespace DataManagement
             return false;
         }
 
-        private bool CheckData(string json)
+        private bool CheckData(string json, string filePath)
         {
             // get json from a temporary, duplicate save file
             SaveData tempSaveData = new SaveData();
@@ -81,9 +73,9 @@ namespace DataManagement
             return (oldHash == newHash);
         }
 
-        public void Delete()
+        public void Delete(string filePath)
         {
-            File.Delete(GetSaveFilename());
+            File.Delete(filePath);
         }
 
         // encrypting our save file string

@@ -93,7 +93,7 @@ public class ColorFlasher : MonoBehaviour
         Color newColor = flashColor;
         for (float elapsedTime = 0f; elapsedTime <= _flashInTime; elapsedTime += Time.deltaTime)
         {
-            newColor.a = Mathf.Lerp(0, _alphaMax, elapsedTime / _flashInTime);
+            newColor.a = Mathf.Lerp(_alphaMin, _alphaMax, elapsedTime / _flashInTime);
             _flashImage.color = newColor;
             yield return null;
         }
@@ -107,7 +107,7 @@ public class ColorFlasher : MonoBehaviour
         Color newColor = flashColor;
         for (float elapsedTime = 0f; elapsedTime <= _flashOutTime; elapsedTime += Time.deltaTime)
         {
-            newColor.a = Mathf.Lerp(_alphaMax, 0, elapsedTime / _flashOutTime);
+            newColor.a = Mathf.Lerp(_alphaMax, _alphaMin, elapsedTime / _flashOutTime);
             _flashImage.color = newColor;
             yield return null;
         }

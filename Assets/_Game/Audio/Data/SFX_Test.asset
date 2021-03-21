@@ -12,14 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b9f54e29ada10f4eb324eb547417a3b, type: 3}
   m_Name: SFX_Test
   m_EditorClassIdentifier: 
-  _possibleClips: []
+  _possibleClips:
+  - {fileID: 8300000, guid: bba82ec3b55130747980cd1e6684d35c, type: 3}
+  - {fileID: 8300000, guid: cd5ed44ce09770744b457c10e7834774, type: 3}
+  - {fileID: 8300000, guid: 3d62ce2f46e9914459fa18366bdb4f1c, type: 3}
   _volume:
-    MinValue: 0.2551021
-    MaxValue: 0.4693878
+    MinValue: 0.6214286
+    MaxValue: 0.72346944
   _pitch:
-    MinValue: 0
-    MaxValue: 0
-  _isLooping: 0
+    MinValue: 0.694898
+    MaxValue: 1.3459183
   _audioMixer: {fileID: 0}
+  _spatialBlend: 0
   _attenuationMin: 1
   _attenuationMax: 500

@@ -14,30 +14,36 @@ public class SoundEvent : ScriptableObject
     [SerializeField][MinMaxRange(0, 2)]
     RangedFloat _pitch = new RangedFloat(.95f, 1.05f);
 
-    [SerializeField] bool _isLooping;
     [SerializeField] AudioMixer _audioMixer = null;
-    
-    [Header("3D Settings")]
+
+    [Header("Attenuation Settings")]
+    [Range(0, 1)][SerializeField]
+    float _spatialBlend = 0;
+    //TODO hide these fields if 2D is true
     [SerializeField] float _attenuationMin = 1;
     [SerializeField] float _attenuationMax = 500;
 
     public AudioClip Clip { get; private set; }
     public float Volume { get; private set; }
     public float Pitch { get; private set; }
+
+    public float SpatialBlend => _spatialBlend;
     public float AttenuationMin => _attenuationMin;
     public float AttenuationMax => _attenuationMax;
-    public bool IsLooping => _isLooping;
+
     public AudioMixer Mixer => _audioMixer;
 
-    private AudioSource _audioSource;
-
-    public void Play()
+    public void PlayOneShot(Vector3 position)
     {
-        if (_possibleClips.Length == 0) return;
+        if (_possibleClips.Length == 0)
+        {
+            Debug.LogWarning("SoundEvent.Play: no clips specified");
+            return;
+        }
 
         SetVariationValues();
 
-        AudioManager.Instance.PlaySound(this);
+        SoundManager.Instance.PlayOneShot(this, position);
     }
 
     public void Preview(AudioSource source)
@@ -51,23 +57,6 @@ public class SoundEvent : ScriptableObject
         source.Play();
     }
 
-    /*
-    public void Play2D()
-    {
-        if (_possibleClips.Length == 0) return;
-
-        SetVariationValues();
-        AudioManager.Instance.PlaySound2D(this);
-    }
-
-    public void Play3D(Vector3 position)
-    {
-        if (_possibleClips.Length == 0) return;
-
-        SetVariationValues();
-        AudioManager.Instance.PlaySound3D(this, position);
-    }
-    */
     private void SetVariationValues()
     {
         Clip = _possibleClips[Random.Range(0, _possibleClips.Length)];

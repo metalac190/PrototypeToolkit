@@ -6,6 +6,7 @@ using UnityEditor;
 [CustomEditor(typeof(SoundEvent), true)]
 public class SoundEventEditor : Editor
 {
+    
     [SerializeField] private AudioSource _previewer;
 
     public void OnEnable()
@@ -22,6 +23,8 @@ public class SoundEventEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        var soundEvent = target as SoundEvent;
+
         DrawDefaultInspector();
 
         DrawPreviewButton();
