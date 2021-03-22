@@ -5,13 +5,19 @@ using UnityEngine.InputSystem;
 
 public class ScriptTester : MonoBehaviour
 {
-    [SerializeField] SoundEvent _soundEvent;
-
     void Update()
     {
-        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        if (Keyboard.current.qKey.wasPressedThisFrame)
         {
-            _soundEvent.PlayOneShot(this.transform.position);
+            
+        }
+        if (Keyboard.current.wKey.wasPressedThisFrame)
+        {
+            
+        }
+        if (Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            
         }
     }
 
