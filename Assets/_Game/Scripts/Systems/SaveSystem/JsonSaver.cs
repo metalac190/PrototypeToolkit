@@ -9,7 +9,7 @@ using System.Security.Cryptography;
 /// <summary>
 /// Based on Wilmer Lin's Level Management in Unity tutorial
 /// </summary>
-namespace DataManagement
+namespace SaveSystem
 {
     public class JsonSaver
     {

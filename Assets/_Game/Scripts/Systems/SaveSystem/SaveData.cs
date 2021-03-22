@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace DataManagement
+namespace SaveSystem
 {
     [System.Serializable]
     public class SaveData

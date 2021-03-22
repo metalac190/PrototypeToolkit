@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using LevelManagement;
 
 namespace Levels.MainMenu
 {
@@ -14,26 +13,6 @@ namespace Levels.MainMenu
         [SerializeField] Button _backButton;
 
         public Button BackButton => _backButton;
-
-        private void OnEnable()
-        {
-            LoadData();
-        }
-
-        private void OnDisable()
-        {
-            SaveData();
-        }
-
-        void LoadData()
-        {
-
-        }
-
-        void SaveData()
-        {
-
-        }
     }
 }
 

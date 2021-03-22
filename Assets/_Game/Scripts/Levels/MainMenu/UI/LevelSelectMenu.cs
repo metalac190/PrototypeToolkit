@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Levels.MainMenu
 {
-    public class ModeSelectMenu : Menu
+    public class LevelSelectMenu : Menu
     {
         [SerializeField] Button _playButton;
         [SerializeField] Button _backButton;

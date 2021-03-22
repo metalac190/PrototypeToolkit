@@ -81,4 +81,9 @@ public abstract class StateMachineMB : MonoBehaviour
         if (CurrentState != null && !_inTransition)
             CurrentState.FixedUpdate();
     }
+
+    protected virtual void OnDestroy()
+    {
+        CurrentState.Exit();
+    }
 }

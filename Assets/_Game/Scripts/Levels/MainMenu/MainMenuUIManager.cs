@@ -10,19 +10,19 @@ namespace Levels.MainMenu
         [SerializeField] private RootMenu _rootMenu;
         [SerializeField] private SettingsMenu _settingsMenu;
         [SerializeField] private CreditsMenu _creditsMenu;
-        [SerializeField] private ModeSelectMenu _modeSelectMenu;
+        [SerializeField] private LevelSelectMenu _levelSelectMenu;
 
         public RootMenu RootMenu => _rootMenu;
         public SettingsMenu SettingsMenu => _settingsMenu;
         public CreditsMenu CreditsMenu => _creditsMenu;
-        public ModeSelectMenu ModeSelectMenu => _modeSelectMenu;
+        public LevelSelectMenu LevelSelectMenu => _levelSelectMenu;
 
         public override void InitializeMenus()
         {
             _rootMenu.Canvas.gameObject.SetActive(false);
             _settingsMenu.Canvas.gameObject.SetActive(false);
             _creditsMenu.Canvas.gameObject.SetActive(false);
-            _modeSelectMenu.Canvas.gameObject.SetActive(false);
+            _levelSelectMenu.Canvas.gameObject.SetActive(false);
         }
     }
 }

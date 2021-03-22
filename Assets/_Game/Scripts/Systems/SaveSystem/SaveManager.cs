@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 
-namespace DataManagement
+namespace SaveSystem
 {
     public class SaveManager
     {
