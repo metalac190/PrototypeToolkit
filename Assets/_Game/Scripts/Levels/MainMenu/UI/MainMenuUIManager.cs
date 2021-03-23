@@ -19,10 +19,10 @@ namespace Levels.MainMenu
 
         public override void InitializeMenus()
         {
-            _rootMenu.Canvas.gameObject.SetActive(false);
-            _settingsMenu.Canvas.gameObject.SetActive(false);
-            _creditsMenu.Canvas.gameObject.SetActive(false);
-            _levelSelectMenu.Canvas.gameObject.SetActive(false);
+            _rootMenu.CloseImmediate();
+            _settingsMenu.CloseImmediate();
+            _creditsMenu.CloseImmediate();
+            _levelSelectMenu.CloseImmediate();
         }
     }
 }

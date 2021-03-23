@@ -18,12 +18,11 @@ namespace Levels.Game
 
         public override void InitializeMenus()
         {
-            _gameMenu.Canvas.gameObject.SetActive(false);
-            _pauseMenu.Canvas.gameObject.SetActive(false);
-            _winMenu.Canvas.gameObject.SetActive(false);
-            _loseMenu.Canvas.gameObject.SetActive(false);
+            _gameMenu.CloseImmediate();
+            _pauseMenu.CloseImmediate();
+            _winMenu.CloseImmediate();
+            _loseMenu.CloseImmediate();
         }
-
     }
 }
 
