@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace SoundSystem
 {
-    [CustomEditor(typeof(SoundEvent), true)]
+    [CustomEditor(typeof(SFXOneShot), true)]
     public class SoundEventEditor : Editor
     {
 
@@ -25,7 +25,7 @@ namespace SoundSystem
 
         public override void OnInspectorGUI()
         {
-            var soundEvent = target as SoundEvent;
+            var soundEvent = target as SFXOneShot;
 
             DrawDefaultInspector();
 
@@ -40,7 +40,7 @@ namespace SoundSystem
 
             if (GUILayout.Button("Preview"))
             {
-                ((SoundEvent)target).Preview(_previewer);
+                ((SFXOneShot)target).Preview(_previewer);
             }
             EditorGUI.EndDisabledGroup();
         }

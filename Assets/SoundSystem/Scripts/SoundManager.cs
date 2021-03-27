@@ -17,7 +17,7 @@ namespace SoundSystem
 
         #region Play Sounds
 
-        public void PlayOneShot(SoundEvent soundEvent, Vector3 soundPosition)
+        public void PlayOneShot(SFXOneShot soundEvent, Vector3 soundPosition)
         {
             if (soundEvent.Clip == null)
             {
@@ -28,10 +28,13 @@ namespace SoundSystem
             AudioSource newSource = _soundPool.Get();
             // setup
             newSource.clip = soundEvent.Clip;
+            //TODO set Mixer
+            newSource.priority = soundEvent.Priority;
             newSource.volume = soundEvent.Volume;
             newSource.pitch = soundEvent.Pitch;
-
+            newSource.panStereo = soundEvent.StereoPan;
             newSource.spatialBlend = soundEvent.SpatialBlend;
+
             newSource.minDistance = soundEvent.AttenuationMin;
             newSource.maxDistance = soundEvent.AttenuationMax;
 
@@ -51,10 +54,13 @@ namespace SoundSystem
             AudioSource newSource = _soundPool.Get();
             // setup
             newSource.clip = source.clip;
+            //TODO set Mixer
+            newSource.priority = source.priority;
             newSource.volume = source.volume;
             newSource.pitch = source.pitch;
-
+            newSource.panStereo = source.panStereo;
             newSource.spatialBlend = source.spatialBlend;
+
             newSource.minDistance = source.minDistance;
             newSource.maxDistance = source.maxDistance;
 
