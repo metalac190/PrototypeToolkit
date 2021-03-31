@@ -6,13 +6,13 @@ using SoundSystem;
 
 public class ScriptTester : MonoBehaviour
 {
-    [SerializeField] SFXOneShot _sfx;
+    [SerializeField] MusicEvent _musicEvent;
 
     void Update()
     {
         if (Keyboard.current.qKey.wasPressedThisFrame)
         {
-            _sfx.PlayOneShot(Vector3.zero);
+            _musicEvent.Play(1.5f);
         }
         if (Keyboard.current.wKey.wasPressedThisFrame)
         {

@@ -8,29 +8,19 @@ namespace SoundSystem
     public class MusicEvent : ScriptableObject
     {
         [Header("General Settings")]
-        [SerializeField] AudioClip _musicClip = null;
-        [SerializeField] float _fadeTime = 1;
+        [SerializeField] AudioClip[] _musicLayers = null;
 
         // add STEM support later
 
-        public void Play()
+        public void Play(float fadeTime)
         {
-            if (_musicClip == null)
+            if (_musicLayers == null)
             {
                 Debug.LogWarning("MusicEvent.Play(): No musicClip specified");
                 return;
             }
 
-            // if no fade, don't worry about it
-            if (_fadeTime <= 0)
-            {
-                MusicManager.Instance.PlayMusic(_musicClip);
-            }
-            // add a fade
-            else
-            {
-                MusicManager.Instance.PlayMusicWithCrossFade(_musicClip, _fadeTime);
-            }
+            MusicManager.Instance.PlayMusic(this, fadeTime);
         }
     }
 

@@ -4,8 +4,63 @@ using UnityEngine;
 
 namespace SoundSystem
 {
-    public class MusicManager : SingletonMBPersistent<MusicManager>
+    public class MusicManager : MonoBehaviour
     {
+        #region Singleton
+        private static bool _shuttingDown = false;
+        private static object _lock = new object();
+
+        private static MusicManager _instance;
+        public static MusicManager Instance
+        {
+            get
+            {
+                if (_shuttingDown)
+                {
+                    return null;
+                }
+                lock (_lock)
+                {
+                    _instance = FindObjectOfType<MusicManager>();
+                    // create it if it's not in the scene
+                    if(_instance == null)
+                    {
+                        GameObject singletonGO = new GameObject();
+                        _instance = singletonGO.AddComponent<MusicManager>();
+                        singletonGO.name = "MusicManager (singleton)";
+
+                        DontDestroyOnLoad(singletonGO);
+                    }
+
+                    return _instance;
+                }
+            }
+        }
+
+        void Awake()
+        {
+            if(_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                _instance = this;
+            }
+
+            SetupMusicPlayers();
+        }
+        #endregion
+
+        void SetupMusicPlayers()
+        {
+            _musicSource1 = gameObject.AddComponent<AudioSource>();
+            _musicSource2 = gameObject.AddComponent<AudioSource>();
+
+            _musicSource1.volume = CurrentMusicVolume;
+            _musicSource2.volume = CurrentMusicVolume;
+        }
+        
         // use 2 music sources so that we can do cross blending
         AudioSource _musicSource1 = null;
         AudioSource _musicSource2 = null;
@@ -26,13 +81,6 @@ namespace SoundSystem
         public AudioSource ActiveSource => (_music1SourcePlaying) ? _musicSource1 : _musicSource2;
         public AudioSource InActiveSource => (_music1SourcePlaying) ? _musicSource2 : _musicSource1;
 
-        #region MONOBEHAVIOUR
-        protected override void Awake()
-        {
-            SetupMusicSources();
-        }
-        #endregion
-
         #region PUBLIC METHODS
         public void SetVolume(float newVolume)
         {
@@ -49,14 +97,17 @@ namespace SoundSystem
                 (ActiveSource, targetVolume, volumeBlendDuration));
         }
 
-        public void PlayMusic(AudioClip musicClip)
+        public void PlayMusic(MusicEvent musicEvent, float fadeTime)
         {
+            /*
             // determine which source is active
             AudioSource activeSource = ActiveSource;
 
             activeSource.clip = musicClip;
             activeSource.volume = CurrentMusicVolume;
             activeSource.Play();
+            */
+
         }
 
         public void PlayMusicWithFade(AudioClip musicClip, float transitionDuration)
@@ -138,14 +189,6 @@ namespace SoundSystem
             originalSource.Stop();
         }
 
-        private void SetupMusicSources()
-        {
-            _musicSource1 = gameObject.AddComponent<AudioSource>();
-            _musicSource2 = gameObject.AddComponent<AudioSource>();
-
-            _musicSource1.volume = CurrentMusicVolume;
-            _musicSource2.volume = CurrentMusicVolume;
-        }
     }
 }
 

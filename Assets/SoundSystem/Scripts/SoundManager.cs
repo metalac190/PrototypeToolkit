@@ -4,13 +4,59 @@ using UnityEngine;
 
 namespace SoundSystem
 {
-    public class SoundManager : SingletonMB<SoundManager>
+    public class SoundManager : MonoBehaviour
     {
+        #region Singleton
+        private static bool _shuttingDown = false;
+        private static object _lock = new object();
+
+        private static SoundManager _instance;
+        public static SoundManager Instance
+        {
+            get
+            {
+                if (_shuttingDown)
+                {
+                    return null;
+                }
+                lock (_lock)
+                {
+                    _instance = FindObjectOfType<SoundManager>();
+                    // create it if it's not in the scene
+                    if (_instance == null)
+                    {
+                        GameObject singletonGO = new GameObject();
+                        _instance = singletonGO.AddComponent<SoundManager>();
+                        singletonGO.name = "SoundManager (singleton)";
+
+                        DontDestroyOnLoad(singletonGO);
+                    }
+
+                    return _instance;
+                }
+            }
+        }
+
+        void Awake()
+        {
+            if (_instance != null && _instance != this)
+            {
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                _instance = this;
+            }
+
+            Initialize();
+        }
+        #endregion
+
         [SerializeField] int _startingPoolSize = 5;
 
         SoundPool _soundPool;
 
-        protected override void Awake()
+        void Initialize()
         {
             _soundPool = new SoundPool(this.transform, _startingPoolSize);
         }

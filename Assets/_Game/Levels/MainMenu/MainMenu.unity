@@ -758,7 +758,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b6d09f1c650be24c8ddd647efe00090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sfx: {fileID: 11400000, guid: 28bfc4eb834446541b0ce8a54bcf8afd, type: 2}
+  _musicEvent: {fileID: 11400000, guid: 9e351da5cdfef9c44b4e01eb3b97471d, type: 2}
 --- !u!4 &1300865354
 Transform:
   m_ObjectHideFlags: 0
