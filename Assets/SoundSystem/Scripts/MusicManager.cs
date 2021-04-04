@@ -4,6 +4,13 @@ using UnityEngine;
 
 namespace SoundSystem
 {
+    /// <summary>
+    /// This class is a Singleton that helps maintain consistency across MusicPlayers in the scene.
+    /// The main approach is to control 2 'MusicPlayers' that can activate/deactivate and blend with
+    /// each other. New 'track layers' can be faded up to create additive music tracks that emulate
+    /// stems. This can be useful for building new musical instrument layers based on game events
+    /// to increase or decrease intensity.
+    /// </summary>
     public class MusicManager : MonoBehaviour
     {
         #region Singleton
@@ -52,91 +59,66 @@ namespace SoundSystem
         }
         #endregion
 
-        void SetupMusicPlayers()
-        {
-            _musicSource1 = gameObject.AddComponent<AudioSource>();
-            _musicSource2 = gameObject.AddComponent<AudioSource>();
+        public const int MaxLayers = 3;
 
-            _musicSource1.volume = CurrentMusicVolume;
-            _musicSource2.volume = CurrentMusicVolume;
-        }
-        
         // use 2 music sources so that we can do cross blending
-        AudioSource _musicSource1 = null;
-        AudioSource _musicSource2 = null;
+        MusicPlayer _musicPlayer1 = null;
+        MusicPlayer _musicPlayer2 = null;
 
         private bool _music1SourcePlaying = false;
         private Coroutine _musicBlendRoutine = null;
+        private int _currentLayerLevel;     // used to maintain a 'level' for the musicplayer intensity
+        private float _volume = .8f;
 
-        private float _currentMusicVolume = .8f;
-        public float CurrentMusicVolume
+        public int ActiveLayerLevel => _currentLayerLevel;
+
+        public float Volume
         {
-            get => _currentMusicVolume;
+            get => _volume;
             private set
             {
                 value = Mathf.Clamp(value, 0, 1);
-                _currentMusicVolume = value;
+                _volume = value;
             }
         }
-        public AudioSource ActiveSource => (_music1SourcePlaying) ? _musicSource1 : _musicSource2;
-        public AudioSource InActiveSource => (_music1SourcePlaying) ? _musicSource2 : _musicSource1;
+        public MusicPlayer ActivePlayer => (_music1SourcePlaying) ? _musicPlayer1 : _musicPlayer2;
+        public MusicPlayer InactivePlayer => (_music1SourcePlaying) ? _musicPlayer2 : _musicPlayer1;
 
         #region PUBLIC METHODS
-        public void SetVolume(float newVolume)
+        public void SetVolume(float newVolume, float fadeTime)
         {
-            CurrentMusicVolume = newVolume;
-            ActiveSource.volume = CurrentMusicVolume;
+            // pass down volume command to MusicPlayer
+            ActivePlayer.SetVolume(newVolume, fadeTime);
         }
 
-        public void FadeVolume(float targetVolume, float volumeBlendDuration)
+        public void SetLayerLevel(int newLevel, float fadeTime)
         {
-            if (_musicBlendRoutine != null)
-                StopCoroutine(_musicBlendRoutine);
-
-            _musicBlendRoutine = StartCoroutine(FadeMusicVolumeRoutine
-                (ActiveSource, targetVolume, volumeBlendDuration));
+            newLevel = Mathf.Clamp(newLevel, 0, MaxLayers);
+            _currentLayerLevel = newLevel;
+            SetVolume(Volume, fadeTime);
         }
 
         public void PlayMusic(MusicEvent musicEvent, float fadeTime)
         {
-            /*
-            // determine which source is active
-            AudioSource activeSource = ActiveSource;
-
-            activeSource.clip = musicClip;
-            activeSource.volume = CurrentMusicVolume;
-            activeSource.Play();
-            */
-
-        }
-
-        public void PlayMusicWithFade(AudioClip musicClip, float transitionDuration)
-        {
-            if (_musicBlendRoutine != null)
-                StopCoroutine(_musicBlendRoutine);
-
-            _musicBlendRoutine = StartCoroutine(FadeNewMusicRoutine
-                (ActiveSource, musicClip, transitionDuration));
-        }
-
-        public void PlayMusicWithCrossFade(AudioClip musicClip, float transitionTime)
-        {
-            // swap the source
+            ActivePlayer.Stop(fadeTime);
             _music1SourcePlaying = !_music1SourcePlaying;
-
-            InActiveSource.clip = musicClip;
-            InActiveSource.Play();
-
-            if (_musicBlendRoutine != null)
-                StopCoroutine(_musicBlendRoutine);
-            _musicBlendRoutine = StartCoroutine(CrossfadeNewMusicRoutine
-                (ActiveSource, InActiveSource, transitionTime));
+            ActivePlayer.Play(musicEvent, Volume, fadeTime);
         }
         #endregion
 
+        void SetupMusicPlayers()
+        {
+            _musicPlayer1 = gameObject.AddComponent<MusicPlayer>();
+            _musicPlayer2 = gameObject.AddComponent<MusicPlayer>();
+
+            _musicPlayer1.SetVolume(Volume, 0);
+            _musicPlayer2.SetVolume(Volume, 0);
+        }
+
+        /*
         private IEnumerator FadeMusicVolumeRoutine(AudioSource activeSource, float targetVolume, float fadeTime)
         {
-            float startingVolume = CurrentMusicVolume;
+            float startingVolume = Volume;
             // fade volume
             for (float elapsedTime = 0; elapsedTime <= fadeTime; elapsedTime += Time.deltaTime)
             {
@@ -144,7 +126,7 @@ namespace SoundSystem
                 activeSource.volume = newVolume;
                 yield return null;
             }
-            CurrentMusicVolume = targetVolume;
+            Volume = targetVolume;
         }
 
         private IEnumerator FadeNewMusicRoutine(AudioSource activeSource, AudioClip musicClip, float transitionDuration)
@@ -155,7 +137,7 @@ namespace SoundSystem
                 activeSource.Play();
             }
             // fade out
-            float startingVolume = CurrentMusicVolume;
+            float startingVolume = Volume;
             float fadeOutTransitionDuration = transitionDuration / 2;
             for (float elapsedTime = 0; elapsedTime <= fadeOutTransitionDuration; elapsedTime += Time.deltaTime)
             {
@@ -170,7 +152,7 @@ namespace SoundSystem
             float fadeInTransitionDuration = transitionDuration / 2;
             for (float elapsedTime = 0; elapsedTime <= fadeInTransitionDuration; elapsedTime += Time.deltaTime)
             {
-                activeSource.volume = Mathf.Lerp(0, CurrentMusicVolume, elapsedTime / fadeInTransitionDuration);
+                activeSource.volume = Mathf.Lerp(0, Volume, elapsedTime / fadeInTransitionDuration);
                 yield return null;
             }
         }
@@ -178,17 +160,17 @@ namespace SoundSystem
         private IEnumerator CrossfadeNewMusicRoutine
             (AudioSource originalSource, AudioSource newSource, float transitionDuration)
         {
-            float startingVolume = CurrentMusicVolume;
+            float startingVolume = Volume;
             for (float elapsedTime = 0.0f; elapsedTime <= transitionDuration; elapsedTime += Time.deltaTime)
             {
-                originalSource.volume = Mathf.Lerp(CurrentMusicVolume, 0, elapsedTime / transitionDuration);
-                newSource.volume = Mathf.Lerp(0, CurrentMusicVolume, elapsedTime / transitionDuration);
+                originalSource.volume = Mathf.Lerp(Volume, 0, elapsedTime / transitionDuration);
+                newSource.volume = Mathf.Lerp(0, Volume, elapsedTime / transitionDuration);
                 yield return null;
             }
 
             originalSource.Stop();
         }
-
+        */
     }
 }
 

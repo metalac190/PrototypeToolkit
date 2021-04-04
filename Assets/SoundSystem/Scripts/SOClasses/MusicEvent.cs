@@ -10,6 +10,8 @@ namespace SoundSystem
         [Header("General Settings")]
         [SerializeField] AudioClip[] _musicLayers = null;
 
+        public AudioClip[] MusicLayers => _musicLayers;
+
         // add STEM support later
 
         public void Play(float fadeTime)
