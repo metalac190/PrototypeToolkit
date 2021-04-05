@@ -115,20 +115,8 @@ namespace SoundSystem
             _musicPlayer2.SetVolume(Volume, 0);
         }
 
-        /*
-        private IEnumerator FadeMusicVolumeRoutine(AudioSource activeSource, float targetVolume, float fadeTime)
-        {
-            float startingVolume = Volume;
-            // fade volume
-            for (float elapsedTime = 0; elapsedTime <= fadeTime; elapsedTime += Time.deltaTime)
-            {
-                float newVolume = Mathf.Lerp(startingVolume, targetVolume, elapsedTime / fadeTime);
-                activeSource.volume = newVolume;
-                yield return null;
-            }
-            Volume = targetVolume;
-        }
 
+        /*
         private IEnumerator FadeNewMusicRoutine(AudioSource activeSource, AudioClip musicClip, float transitionDuration)
         {
             // validate source
