@@ -28,17 +28,21 @@ namespace SoundSystem
                 }
                 lock (_lock)
                 {
-                    _instance = FindObjectOfType<MusicManager>();
-                    // create it if it's not in the scene
                     if(_instance == null)
                     {
-                        GameObject singletonGO = new GameObject();
-                        _instance = singletonGO.AddComponent<MusicManager>();
-                        singletonGO.name = "MusicManager (singleton)";
+                        _instance = FindObjectOfType<MusicManager>();
+                        // create it if it's not in the scene
+                        if (_instance == null)
+                        {
+                            GameObject singletonGO = new GameObject();
+                            _instance = singletonGO.AddComponent<MusicManager>();
+                            singletonGO.name = "MusicManager (singleton)";
 
-                        DontDestroyOnLoad(singletonGO);
+                            DontDestroyOnLoad(singletonGO);
+                        }
+
+                        
                     }
-
                     return _instance;
                 }
             }
@@ -59,18 +63,18 @@ namespace SoundSystem
         }
         #endregion
 
-        public const int MaxLayers = 3;
+        public const int MaxLayers = 4;
 
         // use 2 music sources so that we can do cross blending
         MusicPlayer _musicPlayer1 = null;
         MusicPlayer _musicPlayer2 = null;
+        MusicEvent _activeSong;
 
         private bool _music1SourcePlaying = false;
-        private Coroutine _musicBlendRoutine = null;
-        private int _currentLayerLevel;     // used to maintain a 'level' for the musicplayer intensity
+        private int _activeLayerIndex;     // used to maintain a 'level' for the musicplayer intensity
         private float _volume = .8f;
 
-        public int ActiveLayerLevel => _currentLayerLevel;
+        public int ActiveLayerIndex => _activeLayerIndex;
 
         public float Volume
         {
@@ -87,22 +91,79 @@ namespace SoundSystem
         #region PUBLIC METHODS
         public void SetVolume(float newVolume, float fadeTime)
         {
-            // pass down volume command to MusicPlayer
-            ActivePlayer.SetVolume(newVolume, fadeTime);
+            Volume = newVolume;
+            // fade MusicPlayer volumes to match with new change
+            ActivePlayer.FadeVolume(Volume, fadeTime);
         }
 
-        public void SetLayerLevel(int newLevel, float fadeTime)
+        public void SetLayerLevel(int newLayerIndex, float fadeTime)
         {
-            newLevel = Mathf.Clamp(newLevel, 0, MaxLayers);
-            _currentLayerLevel = newLevel;
+            newLayerIndex = Mathf.Clamp(newLayerIndex, 0, MaxLayers-1);
+            // if the layer changed, don't do anything different
+            if (newLayerIndex == _activeLayerIndex)
+            {
+                Debug.Log("Layer didn't change");
+                return;
+            }
+
+            _activeLayerIndex = newLayerIndex;
             SetVolume(Volume, fadeTime);
+        }
+
+        public void IncreaseLayerLevel(float fadeTime)
+        {
+            int newLayerIndex = _activeLayerIndex + 1;
+            newLayerIndex = Mathf.Clamp(newLayerIndex, 0, MaxLayers - 1);
+
+            // if the layer changed, don't do anything different
+            if (newLayerIndex == _activeLayerIndex)
+                return;
+
+            _activeLayerIndex = newLayerIndex;
+            ActivePlayer.FadeVolume(Volume, fadeTime);
+        }
+
+        public void DecreaseLayerLevel(float fadeTime)
+        {
+            int newLayerIndex = _activeLayerIndex - 1;
+            newLayerIndex = Mathf.Clamp(newLayerIndex, 0, MaxLayers - 1);
+
+            // if the layer changed, don't do anything different
+            if (newLayerIndex == _activeLayerIndex)
+            {
+                return;
+            }
+                
+            _activeLayerIndex = newLayerIndex;
+            ActivePlayer.FadeVolume(Volume, fadeTime);
         }
 
         public void PlayMusic(MusicEvent musicEvent, float fadeTime)
         {
-            ActivePlayer.Stop(fadeTime);
+            // if it's the same song, no need to restart
+            if (_activeSong == musicEvent)
+                return;
+            // if there's already a song, stop it
+            if (_activeSong != null)
+                ActivePlayer.Stop(fadeTime);
+            //TODO add song to queue and play once the InActive player is done transitioning
+            // previous song to prevent rapid music request misfires
+
+            // otherwise, play a new song
+            _activeSong = musicEvent;
             _music1SourcePlaying = !_music1SourcePlaying;
-            ActivePlayer.Play(musicEvent, Volume, fadeTime);
+
+            ActivePlayer.Play(musicEvent, fadeTime);
+        }
+
+        public void StopMusic(float fadeTime)
+        {
+            // if there's no song, there's nothing to stop
+            if (_activeSong == null)
+                return;
+
+            _activeSong = null;
+            ActivePlayer.Stop(fadeTime);
         }
         #endregion
 
@@ -111,54 +172,9 @@ namespace SoundSystem
             _musicPlayer1 = gameObject.AddComponent<MusicPlayer>();
             _musicPlayer2 = gameObject.AddComponent<MusicPlayer>();
 
-            _musicPlayer1.SetVolume(Volume, 0);
-            _musicPlayer2.SetVolume(Volume, 0);
+            _musicPlayer1.FadeVolume(0, 0);
+            _musicPlayer2.FadeVolume(0, 0);
         }
-
-
-        /*
-        private IEnumerator FadeNewMusicRoutine(AudioSource activeSource, AudioClip musicClip, float transitionDuration)
-        {
-            // validate source
-            if (activeSource.isPlaying == false)
-            {
-                activeSource.Play();
-            }
-            // fade out
-            float startingVolume = Volume;
-            float fadeOutTransitionDuration = transitionDuration / 2;
-            for (float elapsedTime = 0; elapsedTime <= fadeOutTransitionDuration; elapsedTime += Time.deltaTime)
-            {
-                activeSource.volume = Mathf.Lerp(startingVolume, 0, elapsedTime / fadeOutTransitionDuration);
-                yield return null;
-            }
-            // start new music track
-            activeSource.Stop();
-            activeSource.clip = musicClip;
-            activeSource.Play();
-            // fade in
-            float fadeInTransitionDuration = transitionDuration / 2;
-            for (float elapsedTime = 0; elapsedTime <= fadeInTransitionDuration; elapsedTime += Time.deltaTime)
-            {
-                activeSource.volume = Mathf.Lerp(0, Volume, elapsedTime / fadeInTransitionDuration);
-                yield return null;
-            }
-        }
-
-        private IEnumerator CrossfadeNewMusicRoutine
-            (AudioSource originalSource, AudioSource newSource, float transitionDuration)
-        {
-            float startingVolume = Volume;
-            for (float elapsedTime = 0.0f; elapsedTime <= transitionDuration; elapsedTime += Time.deltaTime)
-            {
-                originalSource.volume = Mathf.Lerp(Volume, 0, elapsedTime / transitionDuration);
-                newSource.volume = Mathf.Lerp(0, Volume, elapsedTime / transitionDuration);
-                yield return null;
-            }
-
-            originalSource.Stop();
-        }
-        */
     }
 }
 

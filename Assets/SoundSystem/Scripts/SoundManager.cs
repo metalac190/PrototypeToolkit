@@ -21,17 +21,19 @@ namespace SoundSystem
                 }
                 lock (_lock)
                 {
-                    _instance = FindObjectOfType<SoundManager>();
-                    // create it if it's not in the scene
-                    if (_instance == null)
+                    if(_instance == null)
                     {
-                        GameObject singletonGO = new GameObject();
-                        _instance = singletonGO.AddComponent<SoundManager>();
-                        singletonGO.name = "SoundManager (singleton)";
+                        _instance = FindObjectOfType<SoundManager>();
+                        // create it if it's not in the scene
+                        if (_instance == null)
+                        {
+                            GameObject singletonGO = new GameObject();
+                            _instance = singletonGO.AddComponent<SoundManager>();
+                            singletonGO.name = "SoundManager (singleton)";
 
-                        DontDestroyOnLoad(singletonGO);
+                            DontDestroyOnLoad(singletonGO);
+                        }
                     }
-
                     return _instance;
                 }
             }

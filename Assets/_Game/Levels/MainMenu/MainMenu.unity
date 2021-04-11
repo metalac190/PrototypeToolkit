@@ -631,7 +631,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b6d09f1c650be24c8ddd647efe00090, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _musicEvent: {fileID: 11400000, guid: 9e351da5cdfef9c44b4e01eb3b97471d, type: 2}
+  _song01: {fileID: 11400000, guid: f64fc45d0c8d47345b1b00ddf845d420, type: 2}
+  _song02: {fileID: 11400000, guid: 21cd096480ee7ef4fb4c95277bf5558c, type: 2}
 --- !u!4 &1300865354
 Transform:
   m_ObjectHideFlags: 0
