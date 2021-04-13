@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MUS_Song02
   m_EditorClassIdentifier: 
   _musicLayers:
-  - {fileID: 8300000, guid: b7fb596e41860744b8dee4238acd9ad3, type: 3}
   - {fileID: 8300000, guid: 480986e2325aa8c4291d36ff209182ae, type: 3}
   - {fileID: 8300000, guid: bb2a226ed984ec44da3165839859624d, type: 3}
   - {fileID: 8300000, guid: b0cad4ee1fa07054b995134989b8ce8d, type: 3}
+  _additiveLayers: 1

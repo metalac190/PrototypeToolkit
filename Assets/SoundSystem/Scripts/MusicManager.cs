@@ -63,7 +63,7 @@ namespace SoundSystem
         }
         #endregion
 
-        public const int MaxLayers = 4;
+        public const int MaxLayers = 3;
 
         // use 2 music sources so that we can do cross blending
         MusicPlayer _musicPlayer1 = null;
@@ -147,6 +147,7 @@ namespace SoundSystem
             if (_activeSong != null)
                 ActivePlayer.Stop(fadeTime);
             //TODO add song to queue and play once the InActive player is done transitioning
+            //TODO mute audiosources while 0 'literal mute button'
             // previous song to prevent rapid music request misfires
 
             // otherwise, play a new song

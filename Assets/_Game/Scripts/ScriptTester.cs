@@ -14,25 +14,25 @@ public class ScriptTester : MonoBehaviour
         if (Keyboard.current.qKey.wasPressedThisFrame)
         {
             Debug.Log("Play Song 01");
-            _song01.Play(3f);
+            _song01.Play(5f);
         }
         if (Keyboard.current.wKey.wasPressedThisFrame)
         {
             Debug.Log("Play Song 02");
-            _song02.Play(3f);
+            _song02.Play(5f);
         }
         if (Keyboard.current.eKey.wasPressedThisFrame)
         {
             // remove music layer
             Debug.Log("Decrease Music Layer");
-            MusicManager.Instance.DecreaseLayerLevel(3f);
+            MusicManager.Instance.DecreaseLayerLevel(5f);
             Debug.Log("ActiveLayer: " + MusicManager.Instance.ActiveLayerIndex);
         }
         if (Keyboard.current.rKey.wasPressedThisFrame)
         {
             // add new music layer
             Debug.Log("Increase Music Layer");
-            MusicManager.Instance.IncreaseLayerLevel(3f);
+            MusicManager.Instance.IncreaseLayerLevel(5f);
             Debug.Log("ActiveLayer: " + MusicManager.Instance.ActiveLayerIndex);
         }
         if (Keyboard.current.spaceKey.wasPressedThisFrame)

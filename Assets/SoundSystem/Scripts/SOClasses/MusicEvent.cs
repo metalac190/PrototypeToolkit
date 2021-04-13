@@ -9,8 +9,12 @@ namespace SoundSystem
     {
         [Header("General Settings")]
         [SerializeField] AudioClip[] _musicLayers = null;
+        [Tooltip("If true, layers will be added together, " +
+            "otherwise each layer will player independently")]
+        [SerializeField] bool _additiveLayers = true;
 
         public AudioClip[] MusicLayers => _musicLayers;
+        public bool AdditiveLayers => _additiveLayers;
 
         // add STEM support later
 
