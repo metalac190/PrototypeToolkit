@@ -39,7 +39,7 @@ public class ScriptTester : MonoBehaviour
         {
             // stop the music
             Debug.Log("Stop the music");
-            MusicManager.Instance.StopMusic(3);
+            MusicManager.Instance.StopMusic(5f);
         }
     }
 

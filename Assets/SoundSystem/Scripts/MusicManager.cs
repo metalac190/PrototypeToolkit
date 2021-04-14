@@ -146,9 +146,6 @@ namespace SoundSystem
             // if there's already a song, stop it
             if (_activeSong != null)
                 ActivePlayer.Stop(fadeTime);
-            //TODO add song to queue and play once the InActive player is done transitioning
-            //TODO mute audiosources while 0 'literal mute button'
-            // previous song to prevent rapid music request misfires
 
             // otherwise, play a new song
             _activeSong = musicEvent;

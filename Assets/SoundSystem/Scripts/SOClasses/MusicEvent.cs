@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SoundSystem
 {
-    [CreateAssetMenu(menuName = "Audio/Music Event", fileName = "MUS_")]
+    [CreateAssetMenu(menuName = "SoundSystem/Music Event", fileName = "MUS_")]
     public class MusicEvent : ScriptableObject
     {
         [Header("General Settings")]

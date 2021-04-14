@@ -5,7 +5,7 @@ using UnityEngine.Audio;
 
 namespace SoundSystem
 {
-    [CreateAssetMenu(menuName = "Audio/SFX OneShot", fileName = "SFX_OS_")]
+    [CreateAssetMenu(menuName = "SoundSystem/SFX OneShot", fileName = "SFX_OS_")]
     public class SFXOneShot : SFXEvent
     {
         public void PlayOneShot(Vector3 position)

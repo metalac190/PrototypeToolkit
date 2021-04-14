@@ -71,8 +71,19 @@ namespace SoundSystem
 
             if (_fadeVolumeRoutine != null)
                 StopCoroutine(_fadeVolumeRoutine);
-            _fadeVolumeRoutine = StartCoroutine
-                (FadeVolumeRoutine(targetVolume, fadeTime));
+
+            // if additive, lerp additively
+            if (_musicEvent.AdditiveLayers)
+            {
+                _fadeVolumeRoutine = StartCoroutine
+                    (LerpSourceAdditiveRoutine(targetVolume, fadeTime));
+            }
+            // otherwise lerp up only the active layer
+            else
+            {
+                _fadeVolumeRoutine = StartCoroutine
+                    (LerpSourcesSingleRoutine(targetVolume, fadeTime));
+            }
         }
 
         private IEnumerator StopRoutine(float fadeTime)
@@ -80,9 +91,19 @@ namespace SoundSystem
             _isStopping = true;
             // start the fadeout
             // when done fading out, disable all sources
-            if (_fadeVolumeRoutine != null)
-                StopCoroutine(_fadeVolumeRoutine);
-            _fadeVolumeRoutine = StartCoroutine(FadeVolumeRoutine(0, fadeTime));
+            // if additive, lerp additively
+            if (_musicEvent.AdditiveLayers)
+            {
+                _fadeVolumeRoutine = StartCoroutine
+                    (LerpSourceAdditiveRoutine(0, fadeTime));
+            }
+            // otherwise lerp up only the active layer
+            else
+            {
+                _fadeVolumeRoutine = StartCoroutine
+                    (LerpSourcesSingleRoutine(0, fadeTime));
+            }
+
             // wait for volume fade to finish
             yield return _fadeVolumeRoutine;
 
@@ -90,31 +111,8 @@ namespace SoundSystem
             {
                 source.Stop();
             }
+
             _isStopping = false;
-        }
-
-        private IEnumerator FadeVolumeRoutine(float targetVolume, float fadeTime)
-        {
-            SaveSourceStartVolumes();
-
-            // fade audiosource volumes from their starting points
-            for (float elapsedTime = 0; elapsedTime <= fadeTime; elapsedTime += Time.deltaTime)
-            {
-                // lerp differently depending on layer settings
-                if (_musicEvent.AdditiveLayers)
-                {
-                    LerpSourcesAdditive(targetVolume, fadeTime, elapsedTime);
-                }
-                else
-                {
-                    LerpSourcesUnique(targetVolume, fadeTime, elapsedTime);
-                }
-
-                yield return null;
-            }
-
-            // ensure final volume is set more precisely, instead of weird decimal points
-            SetTargetVolumeOnSources(targetVolume);
         }
 
         private void SaveSourceStartVolumes()
@@ -128,95 +126,103 @@ namespace SoundSystem
         }
 
         // go through sources and fade in all layers up to active layer, fade down the rest
-        private void LerpSourcesAdditive(float targetVolume, float fadeTime, float elapsedTime)
+        private IEnumerator LerpSourceAdditiveRoutine(float targetVolume, float fadeTime)
         {
+            SaveSourceStartVolumes();
+
             float newVolume = 0;
             float startVolume = 0;
 
-            for (int i = 0; i < _layerSources.Count; i++)
+            for (float elapsedTime = 0; elapsedTime <= fadeTime; elapsedTime += Time.deltaTime)
             {
-                // if not, fade down sources that ARENT that active layer
-                if (i <= _musicManager.ActiveLayerIndex)
+                // go through all layers
+                for (int i = 0; i < _layerSources.Count; i++)
                 {
-                    // fade the volume
-                    startVolume = _sourceStartVolumes[i];
-                    newVolume = Mathf.Lerp(startVolume, targetVolume, elapsedTime / fadeTime);
-                    _layerSources[i].volume = newVolume;
-                    Debug.Log("AudioSource: " + i + " | volume: " + newVolume);
+                    // fade layers up until active layer
+                    if (i <= _musicManager.ActiveLayerIndex)
+                    {
+                        // fade the volume
+                        startVolume = _sourceStartVolumes[i];
+                        newVolume = Mathf.Lerp(startVolume, targetVolume, elapsedTime / fadeTime);
+                        _layerSources[i].volume = newVolume;
+                        Debug.Log("AudioSource: " + i + " | volume: " + newVolume);
+                    }
+                    // otherwise fade it to 0 from its current position
+                    else
+                    {
+                        startVolume = _sourceStartVolumes[i];
+                        newVolume = Mathf.Lerp(startVolume, 0, elapsedTime / fadeTime);
+                        _layerSources[i].volume = newVolume;
+                        Debug.Log("AudioSource: " + i + " | volume: " + newVolume);
+                    }
                 }
 
-                // otherwise fade it to 0 from its current position
+                yield return null;
+            }
+            // set final target just to make sure we hit the exact value
+
+            for (int i = 0; i <= _musicManager.ActiveLayerIndex; i++)
+            {
+                if (i <= _musicManager.ActiveLayerIndex)
+                {
+                    _layerSources[i].volume = targetVolume;
+                    Debug.Log("AudioSource: " + i + " | volume: " + _layerSources[i].volume);
+                }
+                // otherwise set it to 0
                 else
                 {
-                    startVolume = _sourceStartVolumes[i];
-                    newVolume = Mathf.Lerp(startVolume, 0, elapsedTime / fadeTime);
-                    _layerSources[i].volume = newVolume;
-                    Debug.Log("AudioSource: " + i + " | volume: " + newVolume);
+                    _layerSources[i].volume = 0;
+                    Debug.Log("AudioSource: " + i + " | volume: " + _layerSources[i].volume);
                 }
             }
         }
 
         // go through all the sources and fade on the active layer, fade down the rest
-        private void LerpSourcesUnique(float targetVolume, float fadeTime, float elapsedTime)
+        private IEnumerator LerpSourcesSingleRoutine(float targetVolume, float fadeTime)
         {
+            SaveSourceStartVolumes();
+
             float newVolume = 0;
             float startVolume = 0;
 
-            for (int i = 0; i < _layerSources.Count; i++)
+            for (float elapsedTime = 0; elapsedTime <= fadeTime; elapsedTime += Time.deltaTime)
             {
-                if (i == _musicManager.ActiveLayerIndex)
-                {
-                    // fade up
-                    startVolume = _sourceStartVolumes[i];
-                    newVolume = Mathf.Lerp(startVolume, targetVolume, elapsedTime / fadeTime);
-                    _layerSources[i].volume = newVolume;
-                    Debug.Log("AudioSource: " + i + " | volume: " + newVolume);
-                }
-                else
-                {
-                    // fade down
-                    startVolume = _sourceStartVolumes[i];
-                    newVolume = Mathf.Lerp(startVolume, 0, elapsedTime / fadeTime);
-                    _layerSources[i].volume = newVolume;
-                    Debug.Log("AudioSource: " + i + " | volume: " + newVolume);
-                }
-            }
-        }
-
-        private void SetTargetVolumeOnSources(float targetVolume)
-        {
-            for (int i = 0; i <= _musicManager.ActiveLayerIndex; i++)
-            {
-                // if additive, set all layers up to active to target
-                if (_musicEvent.AdditiveLayers)
-                {
-                    if (i <= _musicManager.ActiveLayerIndex)
-                    {
-                        _layerSources[i].volume = targetVolume;
-                        Debug.Log("AudioSource: " + i + " | volume: " + _layerSources[i].volume);
-                    }
-                    // otherwise fade it to 0
-                    else
-                    {
-                        _layerSources[i].volume = 0;
-                        Debug.Log("AudioSource: " + i + " | volume: " + _layerSources[i].volume);
-                    }
-                }
-                // otherwise ensure all are 0 except the active layer
-                else
+                for (int i = 0; i < _layerSources.Count; i++)
                 {
                     if (i == _musicManager.ActiveLayerIndex)
                     {
-                        _layerSources[i].volume = targetVolume;
-                        Debug.Log("AudioSource: " + i + " | volume: " + _layerSources[i].volume);
+                        // fade up
+                        startVolume = _sourceStartVolumes[i];
+                        newVolume = Mathf.Lerp(startVolume, targetVolume, elapsedTime / fadeTime);
+                        _layerSources[i].volume = newVolume;
+                        Debug.Log("AudioSource: " + i + " | volume: " + newVolume);
                     }
                     else
                     {
-                        _layerSources[i].volume = 0;
-                        Debug.Log("AudioSource: " + i + " | volume: " + _layerSources[i].volume);
+                        // fade down
+                        startVolume = _sourceStartVolumes[i];
+                        newVolume = Mathf.Lerp(startVolume, 0, elapsedTime / fadeTime);
+                        _layerSources[i].volume = newVolume;
+                        Debug.Log("AudioSource: " + i + " | volume: " + newVolume);
                     }
                 }
 
+                yield return null;
+            }
+
+            // set final target just to make sure we hit the exact value
+            for (int i = 0; i <= _musicManager.ActiveLayerIndex; i++)
+            {
+                if (i == _musicManager.ActiveLayerIndex)
+                {
+                    _layerSources[i].volume = targetVolume;
+                    Debug.Log("AudioSource: " + i + " | volume: " + _layerSources[i].volume);
+                }
+                else
+                {
+                    _layerSources[i].volume = 0;
+                    Debug.Log("AudioSource: " + i + " | volume: " + _layerSources[i].volume);
+                }
             }
         }
     }
