@@ -17,3 +17,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: fb6248423db10d54999e56568e74ee15, type: 3}
   - {fileID: 8300000, guid: 621c877140e872f47aca7c59f3a75db9, type: 3}
   _additiveLayers: 0
+  _mixer: {fileID: 3588613786001126764, guid: 66688626efe13654e8a8db6cb5eb155f, type: 2}

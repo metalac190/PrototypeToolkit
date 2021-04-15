@@ -8,6 +8,7 @@ public class ScriptTester : MonoBehaviour
 {
     [SerializeField] MusicEvent _song01;
     [SerializeField] MusicEvent _song02;
+    [SerializeField] SFXOneShot _sfxTest;
 
     void Update()
     {
@@ -34,6 +35,11 @@ public class ScriptTester : MonoBehaviour
             Debug.Log("Increase Music Layer");
             MusicManager.Instance.IncreaseLayerLevel(5f);
             Debug.Log("ActiveLayer: " + MusicManager.Instance.ActiveLayerIndex);
+        }
+        if (Keyboard.current.aKey.wasPressedThisFrame)
+        {
+            Debug.Log("Play Sound");
+            _sfxTest.PlayOneShot(transform.position);
         }
         if (Keyboard.current.spaceKey.wasPressedThisFrame)
         {

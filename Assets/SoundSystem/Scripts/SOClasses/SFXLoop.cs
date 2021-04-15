@@ -18,7 +18,7 @@ namespace SoundSystem
             }
 
             audioSource.clip = Clip;
-            //TODO set Mixer
+            audioSource.outputAudioMixerGroup = Mixer;
             audioSource.priority = Priority;
             audioSource.volume = Volume;
             audioSource.pitch = Pitch;

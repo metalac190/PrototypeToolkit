@@ -76,7 +76,7 @@ namespace SoundSystem
             AudioSource newSource = _soundPool.Get();
             // setup
             newSource.clip = soundEvent.Clip;
-            //TODO set Mixer
+            newSource.outputAudioMixerGroup = soundEvent.Mixer;
             newSource.priority = soundEvent.Priority;
             newSource.volume = soundEvent.Volume;
             newSource.pitch = soundEvent.Pitch;
@@ -102,7 +102,7 @@ namespace SoundSystem
             AudioSource newSource = _soundPool.Get();
             // setup
             newSource.clip = source.clip;
-            //TODO set Mixer
+            newSource.outputAudioMixerGroup = source.outputAudioMixerGroup;
             newSource.priority = source.priority;
             newSource.volume = source.volume;
             newSource.pitch = source.pitch;

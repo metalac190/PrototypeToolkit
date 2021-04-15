@@ -9,7 +9,7 @@ namespace SoundSystem
     {
         [Header("General Settings")]
         [SerializeField] AudioClip[] _possibleClips = new AudioClip[0];
-        [SerializeField] AudioMixer _audioMixer = null;
+        [SerializeField] AudioMixerGroup _mixer = null;
         [Space]
 
         [Range(0, 128)][SerializeField] 
@@ -27,7 +27,6 @@ namespace SoundSystem
         [SerializeField] [Range(0, 1)]
         float _spatialBlend = 0;
 
-
         [Header("3D Settings")]
         //TODO hide these fields if 2D is true
         [SerializeField] float _attenuationMin = 1;
@@ -36,7 +35,7 @@ namespace SoundSystem
         int _clipIndex = 0;
 
         public AudioClip Clip => _possibleClips[_clipIndex];
-        public AudioMixer Mixer => _audioMixer;
+        public AudioMixerGroup Mixer => _mixer;
 
         public int Priority => _priority;
         public float Volume { get; private set; }

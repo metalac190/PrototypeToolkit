@@ -633,6 +633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _song01: {fileID: 11400000, guid: 69e7f49efac03df42a46cae75e25aa01, type: 2}
   _song02: {fileID: 11400000, guid: 21cd096480ee7ef4fb4c95277bf5558c, type: 2}
+  _sfxTest: {fileID: 11400000, guid: 9af557b665c167b47a1227fe66aef94f, type: 2}
 --- !u!4 &1300865354
 Transform:
   m_ObjectHideFlags: 0

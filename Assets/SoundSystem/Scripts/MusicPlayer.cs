@@ -47,6 +47,7 @@ namespace SoundSystem
             {
                 _layerSources[i].volume = 0;
                 _layerSources[i].clip = musicEvent.MusicLayers[i];
+                _layerSources[i].outputAudioMixerGroup = musicEvent.Mixer;
 
                 if(musicEvent.MusicLayers[i] != null)
                     _layerSources[i].Play();

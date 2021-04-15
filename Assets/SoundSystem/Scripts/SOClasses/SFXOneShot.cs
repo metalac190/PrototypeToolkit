@@ -28,7 +28,7 @@ namespace SoundSystem
             if (Clip == null) return;
 
             source.clip = Clip;
-            //TODO set Mixer
+            source.outputAudioMixerGroup = Mixer;
             source.priority = Priority;
             source.volume = Volume;
             source.pitch = Pitch;

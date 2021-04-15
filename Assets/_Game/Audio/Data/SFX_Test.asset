@@ -16,13 +16,15 @@ MonoBehaviour:
   - {fileID: 8300000, guid: bba82ec3b55130747980cd1e6684d35c, type: 3}
   - {fileID: 8300000, guid: cd5ed44ce09770744b457c10e7834774, type: 3}
   - {fileID: 8300000, guid: 3d62ce2f46e9914459fa18366bdb4f1c, type: 3}
+  _mixer: {fileID: -1418355800270681215, guid: 66688626efe13654e8a8db6cb5eb155f, type: 2}
+  _priority: 128
   _volume:
-    MinValue: 0.6214286
-    MaxValue: 0.72346944
+    MinValue: 0.74734145
+    MaxValue: 0.8544188
   _pitch:
     MinValue: 0.694898
     MaxValue: 1.3459183
-  _audioMixer: {fileID: 0}
+  _stereoPan: 0
   _spatialBlend: 0
   _attenuationMin: 1
   _attenuationMax: 500
